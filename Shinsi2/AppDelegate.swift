@@ -12,6 +12,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setDefaultAppearance()
         setDefaultHudAppearance()
         Defaults.Search.categories.map { [$0: true] }.forEach { UserDefaults.standard.register(defaults: $0) }
+        UserDefaults.standard.register(defaults: [kUDViewerUseDoubleSidedViewer: true])
+        SDWebImageCodersManager.sharedInstance().addCoder(SDWebImageGIFCoder.shared())
         
         #if DEBUG
         //RealmManager.shared.deleteSearchHistory()

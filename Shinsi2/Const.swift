@@ -27,8 +27,10 @@ let kUDGalleryQuickScroll = "kUDGalleryQuickScroll"
 let kUDGalleryBlankPage = "kUDGalleryBlankPage"
 let kUDGalleryFavoriteList = "kUDGalleryFavoriteList"
 let kUDGalleryAutomaticallyScrollToHistory = "kUDGalleryAutomaticallyScrollToHistory"
+let kUDGalleryExpunge = "kUDGalleryExpunge"
 
 let kUDViewerMode = "kUDViewerMode"
+let kUDViewerUseDoubleSidedViewer = "kUDViewerUseDoubleSidedViewer"
 
 //Color
 let kMainColor = UIApplication.shared.keyWindow?.tintColor ?? #colorLiteral(red: 0.8459790349, green: 0.2873021364, blue: 0.2579272389, alpha: 1)
@@ -83,6 +85,10 @@ class Defaults {
             get { return UserDefaults.standard.bool(forKey: kUDGalleryQuickScroll) }
             set { UserDefaults.standard.set(newValue, forKey: kUDGalleryQuickScroll) }
         }
+        static var isShowExpunge: Bool {
+            get { return UserDefaults.standard.bool(forKey: kUDGalleryExpunge) }
+            set { UserDefaults.standard.set(newValue, forKey: kUDGalleryExpunge) }
+        }
         static var isAutomaticallyScrollToHistory: Bool {
             get { return UserDefaults.standard.bool(forKey: kUDGalleryAutomaticallyScrollToHistory) }
             set { UserDefaults.standard.set(newValue, forKey: kUDGalleryAutomaticallyScrollToHistory) }
@@ -105,6 +111,10 @@ class Defaults {
         static var mode: ViewerVC.ViewerMode {
             get { return ViewerVC.ViewerMode(rawValue: UserDefaults.standard.integer(forKey: kUDViewerMode))! }
             set { UserDefaults.standard.set(newValue.rawValue, forKey: kUDViewerMode) }
+        }
+        static var shouldUseDoubleSidedViewer: Bool {
+            get { return UserDefaults.standard.bool(forKey: kUDViewerUseDoubleSidedViewer) }
+            set { UserDefaults.standard.set(newValue, forKey: kUDViewerUseDoubleSidedViewer) }
         }
     }
     

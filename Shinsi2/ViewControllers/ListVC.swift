@@ -14,6 +14,7 @@ class ListVC: BaseViewController {
     private var items: [Doujinshi] = []
     private var currentPage = -1
     private var loadingPage = -1
+    private var pageLastId: String?
     private var backGesture: InteractiveBackGesture?
     private var rowCount: Int { return min(12, max(2, Int(floor(collectionView.bounds.width / Defaults.List.cellWidth)))) }
     @IBOutlet weak var loadingView: LoadingView!
@@ -139,8 +140,11 @@ class ListVC: BaseViewController {
         } else {
             guard loadingPage != currentPage + 1 else {return}
             loadingPage = currentPage + 1
-            if loadingPage == 0 { loadingView.show() }
-            RequestManager.shared.getList(page: loadingPage, search: searchController.searchBar.text) {[weak self] books in
+            if loadingPage == 0 {
+                loadingView.show()
+                pageLastId = nil
+            }
+            RequestManager.shared.getList(page: loadingPage, search: searchController.searchBar.text, next: pageLastId) {[weak self] books in
                 guard let self = self else {return}
                 self.loadingView.hide()
                 guard books.count > 0 else {return}
@@ -150,6 +154,8 @@ class ListVC: BaseViewController {
                 self.collectionView.performBatchUpdates({
                     self.collectionView.insertItems(at: insertIndexPaths)
                 }, completion: nil)
+                guard self.pageLastId != RequestManager.shared.nextPageToken else {return}
+                self.pageLastId = RequestManager.shared.nextPageToken
                 self.currentPage += 1
                 self.loadingPage = -1
             }
@@ -303,15 +309,18 @@ extension ListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         let doujinshi = items[indexPath.item]
         cell.imageView.hero.id = "image_\(doujinshi.id)_0"
         cell.imageView.hero.modifiers = [.arc(intensity: 1), .forceNonFade]
-        cell.imageView.contentMode = .scaleAspectFill
         cell.containerView.hero.modifiers = [.arc(intensity: 1), .fade, .source(heroID: "image_\(doujinshi.id)_0")]
         
         if doujinshi.isDownloaded {
             if let image = UIImage(contentsOfFile: documentURL.appendingPathComponent(doujinshi.coverUrl).path) {
                 cell.imageView.image = image
+                cell.imageView.contentMode = image.preferContentMode
             }
         } else {
-            cell.imageView.sd_setImage(with: URL(string: doujinshi.coverUrl), placeholderImage: nil, options: [.handleCookies], completed: nil)
+            cell.imageView.sd_setImage(with: URL(string: doujinshi.coverUrl), placeholderImage: nil, options: [.handleCookies], completed: { (image, _, _, _) in
+                guard let image = image else {return}
+                cell.imageView.contentMode = image.preferContentMode
+            })
         }
         
         if let language = doujinshi.title.language {

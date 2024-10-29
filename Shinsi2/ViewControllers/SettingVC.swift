@@ -121,6 +121,12 @@ class SettingVC: BaseViewController {
         quickScrollSwitch.addTarget(self, action: #selector(galleryQuickScrollSwitchVauleChanged(sender:)), for: .valueChanged)
         stackView.addRow(createStackView([quickScrollLabel, quickScrollSwitch]))
         
+        let expungeLabel = createSubTitleLabel("Show Expunged")
+        let expungeSwitch = UISwitch()
+        expungeSwitch.isOn = Defaults.Gallery.isShowExpunge
+        expungeSwitch.addTarget(self, action: #selector(galleryExpungeSwitchVauleChanged(sender:)), for: .valueChanged)
+        stackView.addRow(createStackView([expungeLabel, expungeSwitch]))
+        
         //Viewer
         addTitle("Viewer")
         addSubTitle("Scroll Direction")
@@ -128,6 +134,12 @@ class SettingVC: BaseViewController {
         viewerModeSeg.selectedSegmentIndex = Defaults.Viewer.mode == .horizontal ? 0 : 1
         viewerModeSeg.addTarget(self, action: #selector(viewerModeSegmentedControlVauleChanged(sender:)), for: .valueChanged)
         stackView.addRow(viewerModeSeg)
+        
+        let doubleSidedLabel = createSubTitleLabel("Use Double Page")
+        let doubleSidedSwitch = UISwitch()
+        doubleSidedSwitch.isOn = Defaults.Viewer.shouldUseDoubleSidedViewer
+        doubleSidedSwitch.addTarget(self, action: #selector(viewerDoubleSidedSwitchVauleChanged(sender:)), for: .valueChanged)
+        stackView.addRow(createStackView([doubleSidedLabel, doubleSidedSwitch]))
         
         //Cache+
         addTitle("Cache")
@@ -213,6 +225,10 @@ class SettingVC: BaseViewController {
         Defaults.Gallery.isShowQuickScroll = sender.isOn
     }
     
+    @objc func galleryExpungeSwitchVauleChanged(sender: UISwitch) {
+        Defaults.Gallery.isShowExpunge = sender.isOn
+    }
+    
     @objc func galleryFavoriteSwitchVauleChanged(sender: UISwitch) {
         Defaults.Gallery.isShowFavoriteList = sender.isOn
     }
@@ -223,6 +239,10 @@ class SettingVC: BaseViewController {
     
     @objc func viewerModeSegmentedControlVauleChanged(sender: UISegmentedControl) {
         Defaults.Viewer.mode = sender.selectedSegmentIndex == 0 ? .horizontal : .vertical
+    }
+    
+    @objc func viewerDoubleSidedSwitchVauleChanged(sender: UISwitch) {
+        Defaults.Viewer.shouldUseDoubleSidedViewer = sender.isOn
     }
     
     func presentWebViewController(url: URL) {

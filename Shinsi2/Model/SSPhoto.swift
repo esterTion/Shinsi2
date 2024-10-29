@@ -11,6 +11,8 @@ class SSPhoto: NSObject {
     var urlString: String
     var isLoading = false
     let imageCache = SDWebImageManager.shared().imageCache!
+    var pageIndex: IndexPath?
+    static var altLoader = SDWebImageDownloader()
     
     init(URL url: String) {
         urlString = url
@@ -27,7 +29,7 @@ class SSPhoto: NSObject {
                 self.imageLoadComplete()
                 return
             }
-            SDWebImageDownloader.shared().downloadImage( with: URL(string: url)!, options: [.highPriority, .handleCookies, .useNSURLCache], progress: nil, completed: { [weak self] image, _, _, _ in
+            SSPhoto.altLoader.downloadImage( with: URL(string: url)!, options: [.highPriority, .handleCookies, .useNSURLCache], progress: nil, completed: { [weak self] image, _, _, _ in
                 guard let self = self else { return }
                 self.imageCache.store(image, forKey: self.urlString)
                 self.underlyingImage = image

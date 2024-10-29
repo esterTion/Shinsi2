@@ -387,7 +387,8 @@ UICollectionViewDataSourcePrefetching {
             cell.imageView.image = page.localImage
             cell.loadingView?.hide(animated: false)
         } else {
-            if let image = ImageManager.shared.getCache(forKey: page.url) {
+            let image = ImageManager.shared.getCache(forKey: page.url)
+            if image != nil && !image!.isGIF() {
                 cell.imageView.image = image
                 cell.loadingView?.hide(animated: false)
             } else {

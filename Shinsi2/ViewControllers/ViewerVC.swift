@@ -29,7 +29,7 @@ class ViewerVC: UICollectionViewController {
         return ps
     }
     var mode: ViewerMode {
-        if collectionView!.bounds.width > 1000 && collectionView!.bounds.width > collectionView!.bounds.height {
+        if Defaults.Viewer.shouldUseDoubleSidedViewer && collectionView!.bounds.width > 1000 && collectionView!.bounds.width > collectionView!.bounds.height {
             return .doublePage
         } else {
             return Defaults.Viewer.mode
@@ -39,7 +39,7 @@ class ViewerVC: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if !doujinshi.isDownloaded {
-            pages.forEach { $0.photo.checkCache() }
+            pages.forEach{ $0.photo.checkCache() }
         }
         view.layoutIfNeeded()
         collectionView?.reloadData()
@@ -203,6 +203,7 @@ extension ViewerVC: UICollectionViewDelegateFlowLayout {
             cell.image = page.localImage
         } else {
             let photo = page.photo!
+            photo.pageIndex = indexPath
             if let image = photo.underlyingImage {
                 cell.image = image
             } else {
@@ -259,7 +260,10 @@ extension ViewerVC: UICollectionViewDelegateFlowLayout {
     @objc func handleSKPhotoLoadingDidEndNotification(notification: Notification) {
         guard let photo = notification.object as? SSPhoto else { return }
         if photo.underlyingImage != nil {
-            collectionView.reloadData()
+            if photo.pageIndex != nil {
+                collectionView.reloadItems(at: [photo.pageIndex!])
+            }
+            //collectionView.reloadData()
         }
     }
     
