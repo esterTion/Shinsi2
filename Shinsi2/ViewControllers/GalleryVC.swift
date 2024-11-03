@@ -392,7 +392,16 @@ UICollectionViewDataSourcePrefetching {
                 cell.imageView.image = image
                 cell.loadingView?.hide(animated: false)
             } else {
-                cell.imageView.sd_setImage(with: URL(string: page.thumbUrl), placeholderImage: nil, options: [.handleCookies])
+                cell.imageView.sd_setImage(with: URL(string: page.thumbUrl), placeholderImage: nil, options: [.handleCookies],
+                                           completed: { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+                    if page.cropRect == nil || image == nil { return }
+                    let rect = page.cropRect!
+                    let src = image!.cgImage!
+                    if src.height == Int(rect.size.height) as Int && src.width == Int(rect.size.width) as Int { return }
+                    let cropped = src.cropping(to: rect)!
+                    let newImage = UIImage(cgImage: cropped)
+                    cell.imageView.image = newImage
+                })
                 cell.loadingView?.show(animated: false)
             }
         }

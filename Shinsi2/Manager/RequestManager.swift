@@ -98,18 +98,36 @@ class RequestManager {
                 var pages: [Page] = []
                 for link in doc.xpath("//div [@id='gdt'] //a") {
                     if let url = link["href"] {
-                        if let thumbStyle = link.toHTML {
-                            do {
-                            let regex = try NSRegularExpression(pattern: "url\\(([^\\)]+)\\)", options: [])
-                            let nsStr = thumbStyle as NSString
-                            let result = regex.firstMatch(in: thumbStyle, options: [], range: NSMakeRange(0, nsStr.length))
-                            if let result = result {
-                                let range = NSMakeRange(result.range.location + 4, result.range.length - 5)
-                                let thumbUrl = nsStr.substring(with: range)
-                                let page = Page(value: ["thumbUrl": thumbUrl, "url": url])
-                                page.photo = SSPhoto(URL: url)
-                                pages.append(page)
+                        if let imgNode = link.at_css("div"), let thumbStyle = imgNode["style"] {
+                            let styleArray = thumbStyle.replacingOccurrences(of: "px", with: "").components(separatedBy: ";")
+                            var styleMap = Dictionary<String, String>()
+                            for styleString in styleArray {
+                                var styleSeparated = styleString.components(separatedBy: ":")
+                                if (styleSeparated.count < 2) { continue }
+                                let styleName = styleSeparated.remove(at: 0).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).lowercased()
+                                let styleContent = styleSeparated.joined(separator: ":").trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                                styleMap[styleName] = styleContent
                             }
+                            do {
+                                let background = styleMap["background"]
+                                if background != nil {
+                                    let backgroundParts = background!.components(separatedBy: " ")
+                                    let thumbUrlAttr = backgroundParts[1]
+                                    let range = NSMakeRange(4, (thumbUrlAttr as NSString).length - 5)
+                                    let thumbUrl = (thumbUrlAttr as NSString).substring(with: range)
+                                    let numFormatter = NumberFormatter()
+                                    let x = numFormatter.number(from: backgroundParts[2])
+                                    let y = numFormatter.number(from: backgroundParts[3])
+                                    let page = Page(value: ["thumbUrl": thumbUrl, "url": url])
+                                    page.photo = SSPhoto(URL: url)
+                                    if styleMap["width"] != nil && styleMap["height"] != nil {
+                                        let width = numFormatter.number(from: styleMap["width"] ?? "0")
+                                        let height = numFormatter.number(from: styleMap["height"] ?? "0")
+                                        let rect = CGRect(x: (x as! Int) * -1, y: (y as! Int) * -1, width: width as! Int, height: height as! Int)
+                                        page.cropRect = rect
+                                    }
+                                    pages.append(page)
+                                }
                             } catch _ as NSError {}
                         }
                     }

@@ -58,6 +58,7 @@ class Doujinshi: Object {
 class Page: Object {
     @objc dynamic var thumbUrl = ""
     @objc dynamic var url = ""
+    public var cropRect: CGRect?
     var photo: SSPhoto!
     var localUrl: URL {
         return documentURL.appendingPathComponent(thumbUrl)
