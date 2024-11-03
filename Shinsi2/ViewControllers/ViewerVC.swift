@@ -25,7 +25,7 @@ class ViewerVC: UICollectionViewController {
     var pages: [Page] {
         var ps = Array(doujinshi.pages)
         if Defaults.Gallery.isAppendBlankPage { ps.insert(Page.blankPage(), at: 0) }
-        if ps.count % 2 != 0 { ps.append(Page.blankPage()) } // Fix 
+        if Defaults.Viewer.shouldUseDoubleSidedViewer && ps.count % 2 != 0 { ps.append(Page.blankPage()) } // Fix
         return ps
     }
     var mode: ViewerMode {
@@ -218,8 +218,9 @@ extension ViewerVC: UICollectionViewDelegateFlowLayout {
         
         //prefetch
         let pageIndex = indexPath.item
-        for i in 1...5 {
+        for i in -2...2 {
             if i + pageIndex > doujinshi.pages.count - 1 { break }
+            if i + pageIndex < 0 || i == 0 { continue }
             if let nextPhoto = doujinshi.pages[i + pageIndex].photo, nextPhoto.underlyingImage == nil {
                 nextPhoto.loadUnderlyingImageAndNotify()
                 ImageManager.shared.prefetch(urls: [URL(string: doujinshi.pages[i + pageIndex].thumbUrl)!])
