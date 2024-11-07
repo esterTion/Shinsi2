@@ -393,7 +393,7 @@ UICollectionViewDataSourcePrefetching {
                 cell.loadingView?.hide(animated: false)
             } else {
                 cell.imageView.sd_setImage(with: URL(string: page.thumbUrl), placeholderImage: nil, options: [.handleCookies],
-                                           completed: { [weak self] (image: UIImage?, error: Error?, cacheType: SDImageCacheType, url: URL?) in
+                                           completed: { (image: UIImage?, _: Error?, _: SDImageCacheType, _: URL?) in
                     if page.cropRect == nil || image == nil { return }
                     let rect = page.cropRect!
                     let src = image!.cgImage!

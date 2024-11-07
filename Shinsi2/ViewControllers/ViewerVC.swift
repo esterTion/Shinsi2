@@ -209,16 +209,34 @@ extension ViewerVC: UICollectionViewDelegateFlowLayout {
             } else {
                 if let image = ImageManager.shared.getCache(forKey: page.thumbUrl) { 
                     cell.image = image
+                    if page.cropRect != nil {
+                        let rect = page.cropRect!
+                        let src = image.cgImage!
+                        if src.height != Int(rect.size.height) as Int || src.width != Int(rect.size.width) as Int {
+                            let cropped = src.cropping(to: rect)!
+                            let newImage = UIImage(cgImage: cropped)
+                            cell.imageView.image = newImage
+                        }
+                    }
                 } else {
-                    cell.imageView.sd_setImage(with: URL(string: page.thumbUrl), placeholderImage: nil, options: [.handleCookies])
-                } 
+                    cell.imageView.sd_setImage(with: URL(string: page.thumbUrl), placeholderImage: nil, options: [.handleCookies],
+                                               completed: { (image: UIImage?, _: Error?, _: SDImageCacheType, _: URL?) in
+                        if page.cropRect == nil || image == nil { return }
+                        let rect = page.cropRect!
+                        let src = image!.cgImage!
+                        if src.height == Int(rect.size.height) as Int && src.width == Int(rect.size.width) as Int { return }
+                        let cropped = src.cropping(to: rect)!
+                        let newImage = UIImage(cgImage: cropped)
+                        cell.imageView.image = newImage
+                    })
+                }
                 photo.loadUnderlyingImageAndNotify()
             }
         }
         
         //prefetch
         let pageIndex = indexPath.item
-        for i in -2...2 {
+        for i in -4...4 {
             if i + pageIndex > doujinshi.pages.count - 1 { break }
             if i + pageIndex < 0 || i == 0 { continue }
             if let nextPhoto = doujinshi.pages[i + pageIndex].photo, nextPhoto.underlyingImage == nil {
