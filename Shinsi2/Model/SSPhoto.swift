@@ -10,7 +10,7 @@ class SSPhoto: NSObject {
     var underlyingImage: UIImage?
     var urlString: String
     var isLoading = false
-    let imageCache = SDWebImageManager.shared().imageCache!
+    let imageCache = SDWebImageManager.shared.imageCache as! SDImageCache
     var pageIndex: IndexPath?
     static var altLoader = SDWebImageDownloader()
     

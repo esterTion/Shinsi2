@@ -8,9 +8,9 @@ PODS:
   - Realm/Headers (4.4.1)
   - RealmSwift (4.4.1):
     - Realm (= 4.4.1)
-  - SDWebImage (4.4.8):
-    - SDWebImage/Core (= 4.4.8)
-  - SDWebImage/Core (4.4.8)
+  - SDWebImage (5.13.5):
+    - SDWebImage/Core (= 5.13.5)
+  - SDWebImage/Core (5.13.5)
   - SVProgressHUD (2.2.5)
   - SwiftLint (0.39.2)
 
@@ -20,12 +20,14 @@ DEPENDENCIES:
   - Hero
   - Kanna
   - RealmSwift (> 3.16.2)
-  - SDWebImage (~> 4)
+  - SDWebImage (~> 5)
   - SVProgressHUD
   - SwiftLint
 
 SPEC REPOS:
-  https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git:
+  https://github.com/CocoaPods/Specs.git:
+    - SVProgressHUD
+  trunk:
     - Alamofire
     - AloeStackView
     - Hero
@@ -33,7 +35,6 @@ SPEC REPOS:
     - Realm
     - RealmSwift
     - SDWebImage
-    - SVProgressHUD
     - SwiftLint
 
 SPEC CHECKSUMS:
@@ -43,10 +44,10 @@ SPEC CHECKSUMS:
   Kanna: 2c4eddaaa4bfb9a1ed19e53c0b3d42ef02838046
   Realm: 4eb04d7487bd43c0581256f40b424eafb711deff
   RealmSwift: 3eb8924ff7100df5928c7602f71d0fec51e7c9c5
-  SDWebImage: 783af2c3fa36291a250030c4752ee370a9a51d13
+  SDWebImage: 23d714cd599354ee7906dbae26dff89b421c4370
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
 
-PODFILE CHECKSUM: 0d410905583166ba44d86242484e58621d84656a
+PODFILE CHECKSUM: 1dbe0e82cd3030a6646fde40d7f73183e97a7857
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.16.1

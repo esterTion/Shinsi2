@@ -3,7 +3,7 @@ import SDWebImage
 
 class ImageManager {
     static let shared: ImageManager = ImageManager()
-    let imageCache = SDWebImageManager.shared().imageCache!
+    let imageCache = SDWebImageManager.shared.imageCache as! SDImageCache
     private var downloadingUrls: Set<URL> = Set<URL>()
     
     func getCache(forKey name: String) -> UIImage? {

@@ -146,7 +146,7 @@ class SettingVC: BaseViewController {
         let cacheSizeLable = createSubTitleLabel("size: counting...")
         stackView.addRow(cacheSizeLable)
         DispatchQueue.global(qos: .userInteractive).async {
-            let cacheSize = Double(SDImageCache.shared().getSize()) / 1024 / 1024
+            let cacheSize = Double(SDImageCache.shared.totalDiskSize()) / 1024 / 1024
             DispatchQueue.main.async { [weak self, weak cacheSizeLable] in
                 guard let self = self, let cacheSizeLable = cacheSizeLable else {return}
                 cacheSizeLable.text = String(format: "size: %.1fmb", cacheSize)
@@ -159,7 +159,7 @@ class SettingVC: BaseViewController {
                 self.stackView.insertRow(clear, after: cacheSizeLable)
                 self.stackView.setTapHandler(forRow: clear) { _ in
                     SVProgressHUD.show()
-                    SDImageCache.shared().clearDisk(onCompletion: {
+                    SDImageCache.shared.clearDisk(onCompletion: {
                         SVProgressHUD.showSuccess(withStatus: "Deleted")
                     })
                 }
