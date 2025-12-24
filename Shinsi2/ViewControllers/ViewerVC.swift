@@ -280,7 +280,12 @@ extension ViewerVC: UICollectionViewDelegateFlowLayout {
         guard let photo = notification.object as? SSPhoto else { return }
         if photo.underlyingImage != nil {
             if photo.pageIndex != nil {
-                collectionView.reloadItems(at: [photo.pageIndex!])
+                // crash on ios 26: invalid update
+                //collectionView.reloadItems(at: [photo.pageIndex!])
+                let page = getPage(for: photo.pageIndex!)
+                let cell = collectionView.cellForItem(at: photo.pageIndex!) as? ScrollingImageCell
+                let image = photo.underlyingImage
+                cell?.image = image
             }
             //collectionView.reloadData()
         }
