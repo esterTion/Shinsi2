@@ -78,6 +78,7 @@ class ScrollingImageCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        scrollView.setZoomScale(1, animated: false)
         scrollView.frame = bounds
         var size: CGSize
         if let image = imageView.image {
