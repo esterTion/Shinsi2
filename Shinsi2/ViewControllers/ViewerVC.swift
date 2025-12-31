@@ -44,17 +44,6 @@ class ViewerVC: UICollectionViewController {
         view.layoutIfNeeded()
         collectionView?.reloadData()
         
-        if let selectedIndex = selectedIndexPath {
-            switch mode {
-            case .horizontal:
-                collectionView!.scrollToItem(at: selectedIndex, at: .right, animated: false)
-            case .vertical:
-                collectionView!.scrollToItem(at: selectedIndex, at: .top, animated: false)
-            case .doublePage:
-                collectionView!.scrollToItem(at: selectedIndex.item % 2 != 0 ? selectedIndex : convertIndexPath(from: selectedIndex), at: .right, animated: false)
-            }
-        }
-        
         //Close gesture
         let panGR = UIPanGestureRecognizer()
         panGR.addTarget(self, action: #selector(pan(ges:)))
@@ -109,6 +98,16 @@ class ViewerVC: UICollectionViewController {
         collectionView?.isPagingEnabled = mode != .vertical
         if let layout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = mode == .vertical ? .vertical : .horizontal
+        }
+        if let selectedIndex = selectedIndexPath {
+            switch mode {
+            case .horizontal:
+                collectionView!.scrollToItem(at: selectedIndex, at: .right, animated: false)
+            case .vertical:
+                collectionView!.scrollToItem(at: selectedIndex, at: .top, animated: false)
+            case .doublePage:
+                collectionView!.scrollToItem(at: selectedIndex.item % 2 != 0 ? selectedIndex : convertIndexPath(from: selectedIndex), at: .right, animated: false)
+            }
         }
     }
     

@@ -39,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		07CE087BB77CAC2F3F8A5D79 /* Pods-Shinsi2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shinsi2.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shinsi2/Pods-Shinsi2.release.xcconfig"; sourceTree = "<group>"; };
+		19125BFA2F05998D000D7F78 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		540D1FEC20DA3EB60044EC55 /* InsetLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
 		542362F421940916004619F3 /* BsaeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BsaeViewController.swift; sourceTree = "<group>"; };
 		542362F621945C49004619F3 /* WebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVC.swift; sourceTree = "<group>"; };
@@ -124,6 +125,7 @@
 			children = (
 				546663701F1DE3B8003B9E36 /* Main.storyboard */,
 				5466636C1F1DE3B8003B9E36 /* AppDelegate.swift */,
+				19125BFA2F05998D000D7F78 /* SceneDelegate.swift */,
 				546663811F1DE44D003B9E36 /* Const.swift */,
 				5466637F1F1DE44D003B9E36 /* Helper.swift */,
 				546663821F1DE44D003B9E36 /* ViewControllers */,
@@ -333,6 +335,7 @@
 				546663961F1DE511003B9E36 /* Cells.swift in Sources */,
 				546663951F1DE511003B9E36 /* ViewerVC.swift in Sources */,
 				5466638F1F1DE511003B9E36 /* GalleryVC.swift in Sources */,
+				19125BFB2F05998D000D7F78 /* SceneDelegate.swift in Sources */,
 				5466639A1F1DE516003B9E36 /* Const.swift in Sources */,
 				542362F521940916004619F3 /* BsaeViewController.swift in Sources */,
 				542362F721945C49004619F3 /* WebVC.swift in Sources */,
