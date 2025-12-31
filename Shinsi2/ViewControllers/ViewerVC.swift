@@ -35,6 +35,7 @@ class ViewerVC: UICollectionViewController {
             return Defaults.Viewer.mode
         }
     }
+    private var exiting = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +44,19 @@ class ViewerVC: UICollectionViewController {
         }
         view.layoutIfNeeded()
         collectionView?.reloadData()
+        
+        if let selectedIndex = selectedIndexPath {
+            DispatchQueue.main.async{ [self] in
+                switch mode {
+                case .horizontal:
+                    collectionView!.scrollToItem(at: selectedIndex, at: .right, animated: false)
+                case .vertical:
+                    collectionView!.scrollToItem(at: selectedIndex, at: .top, animated: false)
+                case .doublePage:
+                    collectionView!.scrollToItem(at: selectedIndex.item % 2 != 0 ? selectedIndex : convertIndexPath(from: selectedIndex), at: .right, animated: false)
+                }
+            }
+        }
         
         //Close gesture
         let panGR = UIPanGestureRecognizer()
@@ -99,19 +113,9 @@ class ViewerVC: UICollectionViewController {
         if let layout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = mode == .vertical ? .vertical : .horizontal
         }
-        if let selectedIndex = selectedIndexPath {
-            switch mode {
-            case .horizontal:
-                collectionView!.scrollToItem(at: selectedIndex, at: .right, animated: false)
-            case .vertical:
-                collectionView!.scrollToItem(at: selectedIndex, at: .top, animated: false)
-            case .doublePage:
-                collectionView!.scrollToItem(at: selectedIndex.item % 2 != 0 ? selectedIndex : convertIndexPath(from: selectedIndex), at: .right, animated: false)
-            }
-        }
     }
     
-    override var prefersStatusBarHidden: Bool { return true }
+    override var prefersStatusBarHidden: Bool { return !exiting }
     
     override var prefersHomeIndicatorAutoHidden: Bool { return true }
     
@@ -143,6 +147,7 @@ class ViewerVC: UICollectionViewController {
     
     @objc func tapToClose(ges: UITapGestureRecognizer) {
         dismiss(animated: true, completion: nil)
+        exiting = true
     }
     
     @objc func pan(ges: UIPanGestureRecognizer) {
@@ -153,6 +158,8 @@ class ViewerVC: UICollectionViewController {
         case .began:
             hero.dismissViewController()
         case .changed:
+            exiting = true
+            setNeedsStatusBarAppearanceUpdate()
             Hero.shared.update(progress)
             for indexPath in collectionView!.indexPathsForVisibleItems {
                 let cell = collectionView!.cellForItem(at: indexPath) as! ScrollingImageCell
@@ -172,6 +179,8 @@ class ViewerVC: UICollectionViewController {
                 Hero.shared.finish()
             } else {
                 Hero.shared.cancel()
+                exiting = false
+                setNeedsStatusBarAppearanceUpdate()
             }
         }
     }
