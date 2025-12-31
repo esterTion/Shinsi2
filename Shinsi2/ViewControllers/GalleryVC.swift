@@ -23,6 +23,7 @@ class GalleryVC: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ScrollingImageCell.topOffset = parent?.view.safeAreaInsets.top ?? 0
         title = doujinshi.gdata?.getTitle() ?? doujinshi.title
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.largeTitleDisplayMode = .never

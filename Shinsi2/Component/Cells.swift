@@ -24,6 +24,7 @@ class CommentCell: UITableViewCell {
 }
 
 class ScrollingImageCell: UICollectionViewCell { 
+    static var topOffset: CGFloat = 0.0
     var imageView: UIImageView = UIImageView()
     var scrollView: UIScrollView = UIScrollView()
     var dTapGR: UITapGestureRecognizer!
@@ -66,7 +67,7 @@ class ScrollingImageCell: UICollectionViewCell {
         
         var y: CGFloat = 0
         if UIDevice.current.userInterfaceIdiom == .phone {
-            y = safeAreaInsets.top
+            y = ScrollingImageCell.topOffset
         }
         progressView.frame = CGRect(x: 0, y: y, width: 0, height: 0)
         progressView.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
