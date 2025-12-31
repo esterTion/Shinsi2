@@ -71,6 +71,7 @@ class ViewerVC: UICollectionViewController {
         
         setNeedsUpdateOfHomeIndicatorAutoHidden()
         NotificationCenter.default.addObserver(self, selector: #selector(handleSKPhotoLoadingDidEndNotification(notification:)), name: .photoLoaded, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleSKPhotoLoadingProgressNotification(notification:)), name: .photoProgress, object: nil)
         
         if #available(iOS 13.0, *) {
             NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIScene.willDeactivateNotification, object: nil)
@@ -289,6 +290,13 @@ extension ViewerVC: UICollectionViewDelegateFlowLayout {
             }
             //collectionView.reloadData()
         }
+    }
+    @objc func handleSKPhotoLoadingProgressNotification(notification: Notification) {
+        guard let photo = notification.object as? SSPhoto else { return }
+        guard let pageIndex = photo.pageIndex else { return }
+        guard let cell = collectionView.cellForItem(at: pageIndex) as? ScrollingImageCell else { return }
+        let info = notification.userInfo as! [String: Int]
+        cell.progress = Float(info["recv"] ?? 0) / Float(info["total"] ?? 1)
     }
     
 }

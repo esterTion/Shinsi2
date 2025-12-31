@@ -36,6 +36,18 @@ class ScrollingImageCell: UICollectionViewCell {
             setNeedsLayout()
         }
     }
+    var progressView: UIView = UIView()
+    var _progress: Float = 0
+    var progress: Float {
+        get {
+            return _progress
+        }
+        set {
+            _progress = newValue
+            if _progress >= 1.0 || _progress <= 0.0 { _progress = 0 }
+            setNeedsLayout()
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -51,6 +63,14 @@ class ScrollingImageCell: UICollectionViewCell {
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         addSubview(scrollView)
+        
+        var y: CGFloat = 0
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            y = safeAreaInsets.top
+        }
+        progressView.frame = CGRect(x: 0, y: y, width: 0, height: 0)
+        progressView.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
+        addSubview(progressView)
         
         dTapGR = UITapGestureRecognizer(target: self, action: #selector(doubleTap(gr:)))
         dTapGR.numberOfTapsRequired = 2 
@@ -94,6 +114,7 @@ class ScrollingImageCell: UICollectionViewCell {
         size = CGSize(width: max(bounds.width, size.width), height: max(bounds.height, size.height))
         imageView.frame = CGRect(origin: .zero, size: size)
         scrollView.contentSize = size
+        progressView.frame = CGRect(x: 0, y: progressView.frame.origin.y, width: bounds.width * CGFloat(_progress), height: 3)
         centerIfNeeded()
     }
     
