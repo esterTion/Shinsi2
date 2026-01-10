@@ -36,6 +36,7 @@ class ViewerVC: UICollectionViewController {
         }
     }
     private var exiting = false
+    private var canLoadImage = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,19 +45,6 @@ class ViewerVC: UICollectionViewController {
         }
         view.layoutIfNeeded()
         collectionView?.reloadData()
-        
-        if let selectedIndex = selectedIndexPath {
-            DispatchQueue.main.async{ [self] in
-                switch mode {
-                case .horizontal:
-                    collectionView!.scrollToItem(at: selectedIndex, at: .right, animated: false)
-                case .vertical:
-                    collectionView!.scrollToItem(at: selectedIndex, at: .top, animated: false)
-                case .doublePage:
-                    collectionView!.scrollToItem(at: selectedIndex.item % 2 != 0 ? selectedIndex : convertIndexPath(from: selectedIndex), at: .right, animated: false)
-                }
-            }
-        }
         
         //Close gesture
         let panGR = UIPanGestureRecognizer()
@@ -85,6 +73,20 @@ class ViewerVC: UICollectionViewController {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        if let selectedIndex = selectedIndexPath {
+            switch mode {
+            case .horizontal:
+                collectionView!.scrollToItem(at: selectedIndex, at: .right, animated: false)
+            case .vertical:
+                collectionView!.scrollToItem(at: selectedIndex, at: .top, animated: false)
+            case .doublePage:
+                collectionView!.scrollToItem(at: selectedIndex.item % 2 != 0 ? selectedIndex : convertIndexPath(from: selectedIndex), at: .right, animated: false)
+            }
+        }
+        canLoadImage = true
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -244,6 +246,7 @@ extension ViewerVC: UICollectionViewDelegateFlowLayout {
         }
         
         //prefetch
+        if !canLoadImage { return cell }
         let pageIndex = indexPath.item
         for i in -4...4 {
             if i + pageIndex > doujinshi.pages.count - 1 { break }
