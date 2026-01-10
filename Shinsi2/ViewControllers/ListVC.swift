@@ -77,6 +77,9 @@ class ListVC: BaseViewController {
         searchController.searchBar.enablesReturnKeyAutomatically = false
         searchController.searchBar.tintColor = view.tintColor
         definesPresentationContext = true
+        if #available(iOS 16.0, *) {
+            navigationItem.preferredSearchBarPlacement = .stacked
+        }
         
         loadNextPage()
     }
