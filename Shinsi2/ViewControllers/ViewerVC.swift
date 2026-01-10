@@ -241,6 +241,7 @@ extension ViewerVC: UICollectionViewDelegateFlowLayout {
                         cell.imageView.image = newImage
                     })
                 }
+                cell.progress = 0.0
                 photo.loadUnderlyingImageAndNotify()
             }
         }
@@ -298,6 +299,7 @@ extension ViewerVC: UICollectionViewDelegateFlowLayout {
                 let cell = collectionView.cellForItem(at: photo.pageIndex!) as? ScrollingImageCell
                 let image = photo.underlyingImage
                 cell?.image = image
+                cell?.progress = 1.0
             }
             //collectionView.reloadData()
         }

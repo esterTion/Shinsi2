@@ -45,7 +45,8 @@ class ScrollingImageCell: UICollectionViewCell {
         }
         set {
             _progress = newValue
-            if _progress >= 1.0 || _progress <= 0.0 { _progress = 0 }
+            if _progress >= 1.0 || _progress < 0.0 { _progress = 0 }
+            else { _progress = _progress * 0.9 + 0.1 }
             setNeedsLayout()
         }
     }
