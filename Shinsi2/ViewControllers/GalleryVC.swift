@@ -298,7 +298,7 @@ class GalleryVC: BaseViewController {
         for i in selectedIndexPaths {
             new.pages.append(Page(value: doujinshi.pages[i.item]))
         }
-        new.gdata!.gid = new.gdata!.gid + String(Date().timeIntervalSince1970)
+        new.gdata!.gid += String(Date().timeIntervalSince1970)
         new.gdata!.filecount = selectedIndexPaths.count
         new.coverUrl = new.pages.first!.thumbUrl
         DownloadManager.shared.download(doujinshi: new)
