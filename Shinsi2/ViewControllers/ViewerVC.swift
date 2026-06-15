@@ -11,11 +11,11 @@ class ViewerVC: UICollectionViewController {
         case doublePage = 2
     }
     var selectedIndexPath: IndexPath? {
-        set { _selectedIndexPath = newValue }
         get {
             if let i = _selectedIndexPath { return IndexPath(item: i.item + (Defaults.Gallery.isAppendBlankPage ? 1 : 0), section: i.section) }
             return _selectedIndexPath
         }
+        set { _selectedIndexPath = newValue }
     }
     private var _selectedIndexPath: IndexPath?
     weak var doujinshi: Doujinshi!
@@ -76,6 +76,8 @@ class ViewerVC: UICollectionViewController {
     }
     
     override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        if canLoadImage { return }
         if let selectedIndex = selectedIndexPath {
             switch mode {
             case .horizontal:
