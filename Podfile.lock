@@ -2,7 +2,7 @@ PODS:
   - Alamofire (4.9.1)
   - AloeStackView (1.2.0)
   - Hero (1.6.4)
-  - Kanna (5.2.7)
+  - Kanna (5.3.0)
   - Realm (4.4.1):
     - Realm/Headers (= 4.4.1)
   - Realm/Headers (4.4.1)
@@ -11,8 +11,10 @@ PODS:
   - SDWebImage (5.21.7):
     - SDWebImage/Core (= 5.21.7)
   - SDWebImage/Core (5.21.7)
-  - SVProgressHUD (2.2.5)
-  - SwiftLint (0.51.0)
+  - SVProgressHUD (2.3.1):
+    - SVProgressHUD/Core (= 2.3.1)
+  - SVProgressHUD/Core (2.3.1)
+  - SwiftLint (0.63.3)
 
 DEPENDENCIES:
   - Alamofire (~> 4)
@@ -40,13 +42,13 @@ SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   AloeStackView: 8a4ce0efa08128dd78d538372f60c76c224034bb
   Hero: 473a0143017e1371d050fcbedb67d317925097f2
-  Kanna: 01cfbddc127f5ff0963692f285fcbc8a9d62d234
+  Kanna: 6ecbd674bcbef2766a2acf80e99d1174440c5b9c
   Realm: 4eb04d7487bd43c0581256f40b424eafb711deff
   RealmSwift: 3eb8924ff7100df5928c7602f71d0fec51e7c9c5
   SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
-  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  SwiftLint: 1b7561918a19e23bfed960e40759086e70f4dba5
+  SVProgressHUD: 4837c74bdfe2e51e8821c397825996a8d7de6e22
+  SwiftLint: 387b65567654da8f832d67fe3c53fd2ff2be8539
 
-PODFILE CHECKSUM: 6e142a4f48b2dc6179130ea938be87c1e9512e5e
+PODFILE CHECKSUM: 4e771f0616c794d54e5a9bd39f7c811c49f8dd4d
 
 COCOAPODS: 1.16.1
