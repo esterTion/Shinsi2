@@ -81,6 +81,13 @@ class ListVC: BaseViewController {
             navigationItem.preferredSearchBarPlacement = .stacked
         }
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidHide),
+            name: UIResponder.keyboardDidHideNotification,
+            object: nil
+        )
+        
         loadNextPage()
     }
     
@@ -112,6 +119,11 @@ class ListVC: BaseViewController {
                 self.collectionView!.scrollToItem(at: indexPath, at: .top, animated: true)
             }
         })
+    }
+    @objc private func keyboardDidHide(_ notification: Notification) {
+        guard searchController.isActive else { return }
+        navigationItem.rightBarButtonItems?.forEach { $0.isEnabled = true }
+        searchController.dismiss(animated: true, completion: nil)
     }
     
     private var initCellWidth = Defaults.List.defaultCellWidth

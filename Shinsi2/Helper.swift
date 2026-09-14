@@ -147,7 +147,7 @@ class InteractiveBackGesture: NSObject, UIGestureRecognizerDelegate {
     var mode: Mode
     var isSimultaneously = true
     
-    init(viewController: UIViewController, toView: UIView, mode: Mode = .push, isSimultaneously: Bool = true ) {
+    init(viewController: UIViewController, toView: UIView, mode: Mode = .push, isSimultaneously: Bool = false ) {
         self.viewController = viewController
         self.view = toView
         self.mode = mode
@@ -177,6 +177,8 @@ class InteractiveBackGesture: NSObject, UIGestureRecognizerDelegate {
                     Hero.shared.cancel()
                 }
             }
+        case .cancelled, .failed:
+            Hero.shared.cancel()
         default:
             break
         }
