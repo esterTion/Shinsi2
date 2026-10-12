@@ -40,7 +40,11 @@ class TagVC: BaseViewController {
                 stackView.hideSeparator(forRow: l)
                 stackView.setInset(forRow: l, inset: UIEdgeInsets(top: 8, left: 15, bottom: 8, right: 15))
                 stackView.setTapHandler(forRow: l) { [weak self] _ in
-                    let string = item.title == "misc" ? tag : item.title + ":" + tag
+                    func tagToSearchWord(tag: String) -> String {
+                        guard tag.contains(" ") else { return tag }
+                        return "\"\(tag)$\""
+                    }
+                    let string = item.title == "misc" ? tag : item.title + ":" + tagToSearchWord(tag: tag)
                     self?.clickBlock?(string)
                 }
             }
