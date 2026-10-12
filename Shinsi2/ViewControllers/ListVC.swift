@@ -229,7 +229,6 @@ class ListVC: BaseViewController {
     }
 
     @objc func longPress(ges: UILongPressGestureRecognizer) {
-        guard mode == .download || mode == .favorite else {return}
         guard ges.state == .began, let indexPath = collectionView.indexPathForItem(at: ges.location(in: collectionView)) else {return}
 
         let doujinshi = items[indexPath.item]
@@ -268,9 +267,34 @@ class ListVC: BaseViewController {
             alert.addAction(shareAction)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alert.addAction(deleteAction)
+        if mode == .download || mode == .favorite {
+            alert.addAction(deleteAction)
+        }
+        if mode != .download {
+            let copyLinkAction = UIAlertAction(title: "Copy Link", style: .default) { (_) in
+                let doujinshi = self.items[indexPath.item]
+                let url = doujinshi.url
+                UIPasteboard.general.string = url
+                SVProgressHUD.show("✓".toIcon(), status: nil)
+                SVProgressHUD.dismiss(withDelay: 1)
+            }
+            alert.addAction(copyLinkAction)
+        }
         alert.addAction(cancelAction)
-        present(alert, animated: true, completion: nil)
+        present(alert, animated: true) { [weak self] in
+            guard let self = self else { return }
+            alert.view.superview?.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(self.alertBackdropTapped(ges:)))
+            tap.cancelsTouchesInView = false
+            alert.view.superview?.addGestureRecognizer(tap)
+        }
+    }
+    
+    @objc private func alertBackdropTapped(ges: UITapGestureRecognizer) {
+        guard let alert = presentedViewController as? UIAlertController else { return }
+        let location = ges.location(in: alert.view)
+        guard !alert.view.bounds.contains(location) else { return }
+        alert.dismiss(animated: true, completion: nil)
     }
     
     @objc func showFavoriteMoveSheet(with indexPath: IndexPath) {

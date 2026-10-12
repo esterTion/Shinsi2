@@ -145,8 +145,21 @@ class ViewerVC: UICollectionViewController {
             let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             alert.addAction(ok)
             alert.addAction(cancel)
-            present(alert, animated: true, completion: nil)
+            present(alert, animated: true) { [weak self] in
+                guard let self = self else { return }
+                alert.view.superview?.isUserInteractionEnabled = true
+                let tap = UITapGestureRecognizer(target: self, action: #selector(self.alertBackdropTapped(ges:)))
+                tap.cancelsTouchesInView = false
+                alert.view.superview?.addGestureRecognizer(tap)
+            }
         }
+    }
+    
+    @objc private func alertBackdropTapped(ges: UITapGestureRecognizer) {
+        guard let alert = presentedViewController as? UIAlertController else { return }
+        let location = ges.location(in: alert.view)
+        guard !alert.view.bounds.contains(location) else { return }
+        alert.dismiss(animated: true, completion: nil)
     }
     
     @objc func tapToClose(ges: UITapGestureRecognizer) {
