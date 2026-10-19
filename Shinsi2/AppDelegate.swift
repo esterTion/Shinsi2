@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.register(defaults: [kUDViewerUseDoubleSidedViewer: true])
         SDImageCodersManager.shared.addCoder(SDImageGIFCoder.shared)
         SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
+        SDImageCache.shared.config.maxDiskAge = (TimeInterval)(90 * 24 * 3600)
         
         #if DEBUG
         //RealmManager.shared.deleteSearchHistory()
